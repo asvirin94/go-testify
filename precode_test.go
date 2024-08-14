@@ -11,41 +11,41 @@ import (
 )
 
 func TestMainHandlerWhenCountMoreThanTotal(t *testing.T) {
-    req := httptest.NewRequest("GET", "/cafe?count=20&city=moscow", nil)
+		req := httptest.NewRequest("GET", "/cafe?count=20&city=moscow", nil)
 
-    responseRecorder := httptest.NewRecorder()
-    handler := http.HandlerFunc(mainHandle)
-    handler.ServeHTTP(responseRecorder, req)
+		responseRecorder := httptest.NewRecorder()
+		handler := http.HandlerFunc(mainHandle)
+		handler.ServeHTTP(responseRecorder, req)
 
-	require.Equal(t, http.StatusOK, responseRecorder.Code)
+		require.Equal(t, http.StatusOK, responseRecorder.Code)
 
-	responseBody := responseRecorder.Body.String()
-	cafes := strings.Split(responseBody, ",")
-	assert.ElementsMatch(t, cafeList["moscow"], cafes, "Все кафе из списка должны быть в ответе")
-}
+		responseBody := responseRecorder.Body.String()
+		cafes := strings.Split(responseBody, ",")
+		assert.ElementsMatch(t, cafeList["moscow"], cafes, "Все кафе из списка должны быть в ответе")
+	}
 
 func TestMainHandlerWhenOk(t *testing.T) {
-	req := httptest.NewRequest("GET", "/cafe?count=3&city=moscow", nil)
+		req := httptest.NewRequest("GET", "/cafe?count=3&city=moscow", nil)
 
-	responseRecorder := httptest.NewRecorder()
-    handler := http.HandlerFunc(mainHandle)
-    handler.ServeHTTP(responseRecorder, req)
+		responseRecorder := httptest.NewRecorder()
+		handler := http.HandlerFunc(mainHandle)
+		handler.ServeHTTP(responseRecorder, req)
 
-	require.Equal(t, http.StatusOK, responseRecorder.Code, "Статус-код должен быть 200 OK")
+		require.Equal(t, http.StatusOK, responseRecorder.Code, "Статус-код должен быть 200 OK")
 
-	require.NotEmpty(t, responseRecorder.Body.String())
+		require.NotEmpty(t, responseRecorder.Body.String())
 }
 
 func TestMainHandlerWhenCityIsNotValid(t *testing.T) {
-	expectedText := "wrong city value"
-	req := httptest.NewRequest("GET", "/cafe?count=3&city=paris", nil)
+		expectedText := "wrong city value"
+		req := httptest.NewRequest("GET", "/cafe?count=3&city=paris", nil)
 
-	responseRecorder := httptest.NewRecorder()
-    handler := http.HandlerFunc(mainHandle)
-    handler.ServeHTTP(responseRecorder, req)
+		responseRecorder := httptest.NewRecorder()
+		handler := http.HandlerFunc(mainHandle)
+		handler.ServeHTTP(responseRecorder, req)
 
-	require.Equal(t, http.StatusBadRequest, responseRecorder.Code, "Статус-код должен быть 400 Bad Request")
+		require.Equal(t, http.StatusBadRequest, responseRecorder.Code, "Статус-код должен быть 400 Bad Request")
 
-	responseBody := responseRecorder.Body.String()
-	assert.Equal(t, expectedText, responseBody)
+		responseBody := responseRecorder.Body.String()
+		assert.Equal(t, expectedText, responseBody)
 }
